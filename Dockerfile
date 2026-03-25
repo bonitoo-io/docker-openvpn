@@ -24,4 +24,4 @@ RUN chmod a+x /usr/local/bin/*
 ADD ./otp/openvpn /etc/pam.d/
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD nc -z 127.0.0.1 1194 || exit 1
+    CMD bash -c 'echo > /dev/tcp/127.0.0.1/1194' || exit 1
