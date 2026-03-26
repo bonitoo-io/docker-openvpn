@@ -343,7 +343,7 @@ user nobody
 group nogroup
 EOF
 
-# TLS control channel protection
+# TLS control channel protection (ta.key is created by ovpn_initpki)
 if [ "${OVPN_TLS_CRYPT}" == "1" ]; then
     echo "tls-crypt $EASYRSA_PKI/ta.key" >> "$conf"
 else

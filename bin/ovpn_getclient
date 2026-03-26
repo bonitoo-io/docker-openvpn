@@ -29,6 +29,11 @@ if [ ! -f "$EASYRSA_PKI/private/${cn}.key" ]; then
     exit 1
 fi
 
+if [ ! -f "$EASYRSA_PKI/ta.key" ]; then
+    echo "TLS key not found at $EASYRSA_PKI/ta.key. Run ovpn_initpki first." >&2
+    exit 1
+fi
+
 get_client_config() {
     mode="$1"
     echo "
@@ -60,12 +65,12 @@ $(cat $EASYRSA_PKI/ca.crt)
 </ca>
 $(if [ "${OVPN_TLS_CRYPT:-0}" == "1" ]; then
 echo "<tls-crypt>"
-cat $EASYRSA_PKI/ta.key
+cat "$EASYRSA_PKI/ta.key"
 echo "</tls-crypt>"
 else
 echo "key-direction 1"
 echo "<tls-auth>"
-cat $EASYRSA_PKI/ta.key
+cat "$EASYRSA_PKI/ta.key"
 echo "</tls-auth>"
 fi)
 "
