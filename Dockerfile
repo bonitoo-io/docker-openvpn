@@ -14,14 +14,15 @@ ENV EASYRSA=/usr/share/easy-rsa \
 
 VOLUME ["/etc/openvpn"]
 
+EXPOSE 1194/udp
 EXPOSE 1194/tcp
 
 CMD ["ovpn_run"]
 
-ADD ./bin /usr/local/bin
+COPY ./bin /usr/local/bin
 RUN chmod a+x /usr/local/bin/*
 
-ADD ./otp/openvpn /etc/pam.d/
+COPY ./otp/openvpn /etc/pam.d/
 
 HEALTHCHECK --interval=30s --timeout=5s --retries=3 \
-    CMD bash -c 'echo > /dev/tcp/127.0.0.1/1194' || exit 1
+    CMD pgrep openvpn > /dev/null || exit 1
